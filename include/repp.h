@@ -185,9 +185,18 @@ namespace Repp
         }
 
         removeHook(ctx);
-        auto result = originalFunc(args...);
-        installHook(ctx, ctx->targetAddress, ctx->replacementFunction);
-        return result;
+        
+        if constexpr (std::is_void_v<decltype(originalFunc(args...))>)
+        {
+            originalFunc(args...);
+            installHook(ctx, ctx->targetAddress, ctx->replacementFunction);
+        }
+        else
+        {
+            auto result = originalFunc(args...);
+            installHook(ctx, ctx->targetAddress, ctx->replacementFunction);
+            return result;
+        }
     }
 
     template <typename Func, typename... Args>
