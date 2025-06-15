@@ -1125,13 +1125,6 @@ namespace Repp
 #endif
     }
 
-    static void replace(uintptr_t target, uintptr_t replacement)
-    {
-        attach(target, [replacement](CpuContext* ctx) {
-            ctx->rip = replacement;
-        });
-    }
-
     static void skipFunction(uintptr_t target, uintptr_t returnValue = 0)
     {
         attach(target, [returnValue](CpuContext* ctx) {
